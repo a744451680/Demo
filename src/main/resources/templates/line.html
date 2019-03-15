@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+</head>
+
+<body>
+
+
+<!--
+    <input id="foo" type="text" value="hello">
+    <button class="btn" data-clipboard-action="copy" data-clipboard-target="#foo">Copy</button> -->
+线路：
+<select id="lines">
+    <option  value="0" >请选择</option>
+</select>
+
+方向：
+<select id="lineDir">
+    <option  value="0" >请选择</option>
+</select>
+
+站点：
+<select id="dirStation">
+    <option  value="0" >请选择</option>
+</select>
+<br>
+<div id = "busInfo"></div>
+
+
+
+</body>
+
+
+<script src="jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+
+
+    $(function(){
+        initLines();
+
+        $("select#lines").change(function(){
+            lineNo =$("#lines").find("option:selected").text();
+            getLineDir(lineNo);
+        });
+
+        $("select#lineDir").change(function(){
+            lineNo =$("#lines").find("option:selected").text();
+            dirId =$("#lineDir").find("option:selected").val();
+            getDirStation(lineNo,dirId);
+        });
+
+        $("select#dirStation").change(function(){
+            lineNo =$("#lines").find("option:selected").text();
+            dirId =$("#lineDir").find("option:selected").val();
+            sdsId =$("#dirStation").find("option:selected").val();
+            getBusTime(lineNo,dirId,sdsId);
+            getDirStation(lineNo,dirId);
+        });
+
+    });
+
+
+    //初始化lines
+    function initLines(){
+        console.log("初始化lines")
+        $("#lines").empty();//清空select列表数据
+        $.ajax({
+            type : "GET",
+            url : "/gj/lines",
+            dataType : "JSON",
+            data : {},
+            success : function(msg) {
+                $("#lines").prepend("<option value='-1'>请选择</option>");//添加第一个option值
+                for (var i = 0; i < msg.length; i++) {
+                    $("#lines").append("<option value='"+i+"'>"+msg[i]+"</option>");
+                }
+            },error:function(e){
+                console.log("获取数据失败",e);
+            }
+        });
+    }
+
+    //获取行车方向
+    function getLineDir(lineNo){
+        console.log("获取行车方向")
+        $("#lineDir").empty();//清空select列表数据
+        $.ajax({
+            type : "GET",
+            url : "/gj/lineDir",
+            dataType : "JSON",
+            data : {lineNo:lineNo},
+            success : function(msg) {
+                $("#lineDir").prepend("<option value='-1'>请选择</option>");//添加第一个option值
+                for (var i = 0; i < msg.length; i++) {
+                    $("#lineDir").append("<option value='"+msg[i].id+"'>"+msg[i].name+"</option>");
+                }
+            },error:function(e){
+                console.log("获取数据失败",e);
+            }
+        });
+    }
+
+
+
+    //获取站点信息
+    function getDirStation(lineNo,dirId){
+        console.log("获取站点信息")
+        $("#dirStation").empty();//清空select列表数据
+        $.ajax({
+            type : "GET",
+            url : "/gj/dirStation",
+            dataType : "JSON",
+            data : {lineNo:lineNo,dirId:dirId},
+            success : function(msg) {
+                $("#dirStation").prepend("<option value='-1'>请选择</option>");//添加第一个option值
+                for (var i = 0; i < msg.length; i++) {
+                    $("#dirStation").append("<option value='"+msg[i].id+"'>"+msg[i].name+"</option>");
+                }
+            },error:function(e){
+                console.log("获取数据失败",e);
+            }
+        });
+    }
+
+
+    //获取实时公交信息
+    function getBusTime(lineNo,dirId,sdsId){
+        console.log("获取实时公交信息",lineNo ,dirId,sdsId)
+        $("#dirStation").empty();//清空select列表数据
+        $.ajax({
+            type : "GET",
+            url : "/gj/busTime",
+            dataType : "JSON",
+            data : {lineNo:lineNo,dirId:dirId,sdsId:sdsId},
+            success : function(msg) {
+                $("#busInfo").html(msg.html);
+            },error:function(e){
+                console.log("获取数据失败",e);
+            }
+        });
+    }
+</script>
+
+</html>

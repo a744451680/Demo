@@ -1,0 +1,255 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<style>
+		.hide{
+			width: 200px;
+			height: 50px;
+			background: white;
+			position: absolute;
+			top: 250px;
+			left: 0px
+		}
+		.red_ball{
+			/*width:30px;*/
+			width:14%;
+			height:30px;
+			border-width:1px 0px 1px 1px;
+			border-color:black;
+			border-style:solid;
+			float:left;
+			line-height:30px;
+			text-align:center;
+			color:red;
+			font-weight:bold;
+		}
+		.blue_ball{
+			/*width:30px;*/
+			width:14%;
+			height:30px;
+			border:1px solid black;
+			float:left;
+			line-height:30px;
+			text-align:center;
+			color:blue;
+			font-weight:bold;
+		}
+		.centerDiv{
+			width:80%;
+			margin: 0 auto;
+			/*margin: 100px;*/
+		}
+		.secDiv{
+			clear:both;
+			text-align:center;
+			margin-top: 50px;
+			margin-right: 50px;
+			margin-bottom: 30px;
+			margin-left: 50px;
+		}
+
+		#mybut{
+			margin: 12px;
+			width:20%;
+			height:27px;
+		}
+		#copybut{
+			margin: 12px;
+			width:20%;
+			height:27px;
+		}
+		#oInput{
+			/*background:rgba(0,0,0,0);*/
+			background-color:transparent;
+			border:0;
+			background:rgba(0,0,0,0)
+			width:1px;
+			height:1px;
+		}
+	</style>
+	<!-- <script src="jquery.js"></script> -->
+	<!-- <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script> -->
+	<script src="jquery-1.7.2.min.js"></script>
+	<script src="clipboard.min.js"></script>
+	<!--上面这行改为自己本地的jquery.js文件路径即可-->
+	<script>
+        //标记变量
+        var t,s=0,ti;
+        $(function(){
+            $("#mybut").click(
+                function(){
+                    if(s==0){
+                        t=window.setInterval('changeNum()',30);
+                        // console.log("--------1---------")
+                        ti = setTimeout("clearInt()",1000);
+                        // console.log("---------2--------")
+                        $("#mybut").html("好");
+                        s=1;
+                    }else{
+                        window.clearInterval(t);
+                        window.clearTimeout(ti);
+                        $("#mybut").html("换一组");
+                        s=0;
+                        initDivNum();
+                    }
+                }
+            );
+            initDivNum();
+
+        });
+        //方法一：一个入口，循环更改各个元素
+        function changeNum(){
+            for(var i=1;i<=6;i++){
+                var num=parseInt($("#d"+i).html(),10);
+                if(num>=33){
+                    num=1;
+                }else{
+                    num++;
+                }
+                if(num<10){
+                    $("#d"+i).html('0'+num);
+                }else{
+                    $("#d"+i).html(num);
+                }
+            }
+            var blueNum=parseInt($("#d7").html(),10);
+            if(blueNum>=16){
+                blueNum=1;
+            }else{
+                blueNum++;
+            }
+            if(blueNum<10){
+                $("#d7").html('0'+blueNum);
+            }else{
+                $("#d7").html(blueNum);
+            }
+        }
+
+        //获得六个红色球号
+        function getAGroupNumber(){
+            var arr=new Array(6);
+            for(var i=0;i<arr.length;i++){
+                var done=false;
+                do{
+                    var num=Math.ceil(Math.random()*33);
+                    if(i>0){
+                        var k=0;
+                        for(var j=0;j<i;j++){
+                            if(arr[j]==num){
+                                break;
+                            }else{
+                                k++;
+                            }
+                        }
+                        if(k==i){
+                            arr[i]=num;
+                            done=true;
+                        }
+                    }else{
+                        arr[i]=num;
+                        done=true;
+                    }
+                }while(!done);
+            }
+            arr.sort(function(a,b){
+                return a>b?1:-1;
+            });
+            return arr;
+        }
+        //获得一个蓝色球号
+        function getBlueNumber(){
+            return Math.ceil(Math.random()*16);
+        }
+        //产生一个双色球号码
+        function initDivNum(){
+            var newArr=getAGroupNumber();
+            for(var i=0;i<6;i++){
+                if(newArr[i]<10){
+                    $("#d"+(i+1)).html('0'+newArr[i]);
+                }else{
+                    $("#d"+(i+1)).html(newArr[i]);
+                }
+            }
+            var blueNum=getBlueNumber();
+            if(blueNum<10){
+                $("#d7").html('0'+blueNum);
+            }else{
+                $("#d7").html(blueNum);
+            }
+            ssqInfo()
+        }
+
+
+        function clearInt(){
+            window.clearInterval(t);
+            $("#mybut").html("换一组");
+            s=0;
+            initDivNum();
+
+            // console.log("clear方法")
+        }
+
+        function ssqInfo(){
+            var d1=document.getElementById("d1").innerText;
+            var d2=document.getElementById("d2").innerText;
+            var d3=document.getElementById("d3").innerText;
+            var d4=document.getElementById("d4").innerText;
+            var d5=document.getElementById("d5").innerText;
+            var d6=document.getElementById("d6").innerText;
+            var d7=document.getElementById("d7").innerText;
+
+            var inputs = document.getElementById('oInput')
+
+            var value = d1+" "+d2+" "+d3+" "+d4+" "+d5+" "+d6+" | "+d7;
+            document.body.appendChild(oInput);
+            /*        oInput.select(); // 选择对象
+                    document.execCommand("Copy"); // 执行浏览器复制命令*/
+            $("#oInput").attr("value",value);
+            console.log(oInput.value)
+        }
+	</script>
+
+
+</head>
+
+<body>
+<!-- <h1>标题</h1> -->
+<div class="secDiv">
+	<div class="centerDiv">
+		<div id="d1" class="red_ball">01</div>
+		<div id="d2" class="red_ball">02</div>
+		<div id="d3" class="red_ball">03</div>
+		<div id="d4" class="red_ball">04</div>
+		<div id="d5" class="red_ball">05</div>
+		<div id="d6" class="red_ball">06</div>
+		<div id="d7" class="blue_ball">07</div>
+		<!-- type="hidden" -->
+		<input id="oInput" type="text" style="" value="">
+
+	</div>
+	<br>
+</div>
+<div class="hide"></div>
+<div class="secDiv">
+	<div class="centerDiv">
+		<button id="mybut">换一组</button>
+		<br>
+
+		<button id="copybut" class="btn" data-clipboard-action="copy" data-clipboard-target="#oInput">复制</button>
+	</div>
+
+</div>
+
+</body>
+
+
+<script>
+    var clipboard = new ClipboardJS('.btn');
+
+    clipboard.on('success', function(e) {
+        alert('复制成功!')
+        e.clearSelection();
+    });
+</script>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>pdf打印模板</title>
+    <style>
+        body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, textarea, p, blockquote, th, td {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-size: 12px;
+            font-family: SimHei;
+            color: #474747;
+            line-height: 1.5;
+            background-color: #FFFFFF;
+            scrollbar-face-color: #dcded6;
+            scrollbar-highlight-color: #ebf0f4;
+            scrollbar-shadow-color: #d0d2c8;
+            scrollbar-3dlight-color: #f2ecdf;
+            scrollbar-arrow-color: #b8893a;
+            scrollbar-track-color: #efefef;
+            scrollbar-darkshadow-color: #98aab1;
+
+        }
+
+        div, table, ul, li {
+            font-size: 12px;
+        }
+
+        table.order_info {
+            margin-left: -2px;
+            font-weight: bold;
+        }
+
+        table.order_info tr td {
+            width: 18%;
+            font-size: 15px;
+        }
+
+        table.listtable {
+            border: 0px;
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #666666;
+            border-width: 1px 0 0 1px;
+        }
+
+        table.listtable th, table.listtable td {
+            border: 1px solid #666666;
+            border-width: 0 1px 1px 0;
+            padding: 2px;
+            font-size: 15px;
+            height: 35px;
+            font-weight: bold;
+        }
+
+        table.listtable th {
+            height: 35px;
+            text-align: center;
+            font-weight: normal;
+            white-space: nowrap;
+            font-weight: bold;
+        }
+
+        table.listtable th a {
+            text-decoration: underline;
+        }
+
+        table.listtable tr {
+            height: 23px;
+            border: 1px;
+        }
+
+        table.listtable td {
+            text-align: center;
+            cursor: default;
+            overflow: hidden;
+        }
+
+        table.listtable td.char {
+            text-align: left;
+            cursor: default;
+            overflow: hidden;
+        }
+
+        table.listtable td.number {
+            text-align: right;
+            cursor: default;
+            overflow: hidden;
+        }
+
+        div.header {
+            width: 100%;
+            font-weight: bold;
+            font-size: 32px;
+        }
+    </style>
+</head>
+<body>
+<#setting classic_compatible=true>
+
+    <div class="printArea">
+        <div align="center" class="header">
+            pdf打印模板
+        </div>
+        <div class="order">
+            <table class="order_info" style="width:100%">
+                <tr>
+                    <!--                     <td align="left" width="30%">${xxx}</td>
+                                        <td align="center" width="40%">${startYear}年${startMonth}期至${endYear}年${endMonth}期</td> -->
+                    <td align="right" width="30%">时间：${time}</td>
+                </tr>
+            </table>
+            <table id="listtb" class="listtable" cellpadding="0" cellspacing="1">
+                <thead>
+                <tr>
+                    <th width="20%" rowspan="1">编号</th>
+                    <th width="20%" rowspan="1">名称</th>
+                    <!--                     <th width="20%" colspan="2">性别</th>
+                                        <th width="20%" colspan="2">性别</th>
+                                        <th width="20%" colspan="2">性别</th> -->
+                </tr>
+                <!--                 <tr>
+                                    <th width="10%">a</th>
+                                    <th width="10%">b</th>
+                                    <th width="10%">a</th>
+                                    <th width="10%">b</th>
+                                    <th width="10%">a</th>
+                                    <th width="10%">b</th>
+                                </tr> -->
+                </thead>
+                <tbody>
+                <#list data as info>
+                    <tr>
+                        <td class="char">${info.id}</td>
+                        <td class="char">${info.name}</td>
+                        <!-- <td class="nuxmber">
+                            <#if info.getXxxValue()=0></#if>
+                            <#if info.getXxxValue()!=0>
+                                ${info.getXxxValue()?string(",##0.00")}
+                            </#if>
+                        </td>
+                        <td class="number">
+                            <#if info.getXxxValue()=0></#if>
+                            <#if info.getXxxValue()!=0>
+                                ${info.getXxxValue()?string(",##0.00")}
+                            </#if>
+                        </td> -->
+                    </tr>
+                </#list>
+                </tbody>
+                <tfoot>
+                <!--  <tr>
+                     <td class="char"></td>
+                     <td class="char">合计</td>
+                     <td class="number">
+                         <#if maplist['total'].getXxxValue=0></#if>
+                         <#if maplist['total'].getXxxValue!=0>
+                             ${maplist['total'].getXxxValue?string(",##0.00")}
+                         </#if>
+                     </td>
+                     <td class="number">
+                         <#if maplist['total'].getXxxValue=0></#if>
+                         <#if maplist['total'].getXxxValue!=0>
+                             ${maplist['total'].getXxxValue?string(",##0.00")}
+                         </#if>
+                     </td>
+
+                 </tr> -->
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+	    	
