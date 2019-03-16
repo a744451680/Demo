@@ -1,5 +1,6 @@
 package top.isyl.demo.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import top.isyl.demo.entity.CURDInfo;
 
@@ -16,4 +17,6 @@ public interface CURDService extends IService<CURDInfo> {
     CURDInfo getInfoById(String id);
 
     String selectCount();
+
+    IPage<CURDInfo> selectInfoPage(Integer pageNum, Integer pageSize);
 }

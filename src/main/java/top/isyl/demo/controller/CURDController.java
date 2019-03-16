@@ -1,6 +1,7 @@
 package top.isyl.demo.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -37,6 +38,21 @@ public class CURDController {
     public AjaxResult selectInfoList() {
         log.info("获取列表");
         List<CURDInfo> curdInfos = curdService.selectInfoList();
+        return new AjaxResult().res(curdInfos);
+    }
+
+
+    /**
+     * 获取列表
+     *
+     * @return
+     */
+    @ApiOperation(value = "获取列表")
+    @GetMapping("/list")
+    public AjaxResult selectInfoList(@ApiParam(name = "pageNum", value = "页码") @RequestParam(defaultValue = "1") Integer pageNum
+            , @ApiParam(name = "pageSize", value = "每页显示数量") @RequestParam(defaultValue = "20") Integer pageSize) {
+        log.info("获取列表  pageNum:{}  pageSize:{]",pageNum,pageSize);
+        IPage<CURDInfo> curdInfos = curdService.selectInfoPage(pageNum,pageSize);
         return new AjaxResult().res(curdInfos);
     }
 

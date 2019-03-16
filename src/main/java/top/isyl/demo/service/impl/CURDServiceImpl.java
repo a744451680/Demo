@@ -1,5 +1,7 @@
 package top.isyl.demo.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import top.isyl.demo.service.CURDService;
@@ -19,6 +21,13 @@ public class CURDServiceImpl extends ServiceImpl<CURDMapper, CURDInfo> implement
         List<CURDInfo> list = this.list();
         return list;
     }
+
+    @Override
+    public IPage<CURDInfo> selectInfoPage(Integer pageNum, Integer pageSize) {
+        IPage<CURDInfo> page = this.page(new Page<>(pageNum, pageSize));
+        return page;
+    }
+
 
     /**
      * 注解方式
