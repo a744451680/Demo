@@ -48,8 +48,8 @@ public class CURDController {
      * @return
      */
     @ApiOperation(value = "获取列表")
-    @GetMapping("/list")
-    public AjaxResult selectInfoList(@ApiParam(name = "pageNum", value = "页码") @RequestParam(defaultValue = "1") Integer pageNum
+    @GetMapping("/pageList")
+    public AjaxResult selectInfoPageList(@ApiParam(name = "pageNum", value = "页码") @RequestParam(defaultValue = "1") Integer pageNum
             , @ApiParam(name = "pageSize", value = "每页显示数量") @RequestParam(defaultValue = "20") Integer pageSize) {
         log.info("获取列表  pageNum:{}  pageSize:{]",pageNum,pageSize);
         IPage<CURDInfo> curdInfos = curdService.selectInfoPage(pageNum,pageSize);
