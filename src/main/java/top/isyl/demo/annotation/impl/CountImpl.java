@@ -72,6 +72,10 @@ public class CountImpl {
                                 counter.setCount(counter.getCount()+1);
                                 counterService.updateById(counter);
                             }
+                        }else{
+                            //注解没有value
+                            //没有让他干点什么呢？
+                            //待定吧
                         }
                         break;
                     }

@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
+import top.isyl.demo.annotation.Count;
 import top.isyl.demo.service.CURDService;
 import top.isyl.demo.entity.AjaxResult;
 import top.isyl.demo.entity.CURDInfo;
@@ -43,12 +44,13 @@ public class CURDController {
 
 
     /**
-     * 获取列表
+     * 获取分页列表
      *
      * @return
      */
-    @ApiOperation(value = "获取列表")
+    @ApiOperation(value = "获取分页列表")
     @GetMapping("/pageList")
+    @Count("123")
     public AjaxResult selectInfoPageList(@ApiParam(name = "pageNum", value = "页码") @RequestParam(defaultValue = "1") Integer pageNum
             , @ApiParam(name = "pageSize", value = "每页显示数量") @RequestParam(defaultValue = "20") Integer pageSize) {
         log.info("获取列表  pageNum:{}  pageSize:{]",pageNum,pageSize);

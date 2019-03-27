@@ -34,6 +34,7 @@ public class MyAnnotationImpl {
     public void around(ProceedingJoinPoint joinPoint) throws Throwable {
         System.out.println("1");
         try {
+            // 使目标方法执行
             joinPoint.proceed();
         } catch (Exception e) {
             e.printStackTrace();
