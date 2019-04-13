@@ -201,6 +201,15 @@
                 </dependency>
         -->
 
+        <!--hutool  工具包-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>4.1.19</version>
+        </dependency>
+
+
+
         <!--google 代码检测-->
         <dependency>
             <groupId>com.google.guava</groupId>
