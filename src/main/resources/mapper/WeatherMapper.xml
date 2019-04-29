@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.isyl.demo.mapper.WeatherMapper">
+
+	<resultMap id="cityMap" type="top.isyl.demo.entity.WeatherInfo">
+		<result column="city_id" property="cityId" jdbcType="VARCHAR" />
+		<result column="city_name" property="cityName" jdbcType="VARCHAR" />
+		<result column="desc" property="desc" jdbcType="VARCHAR" />
+		<result column="upd_TIME" property="updTime" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<!-- 查询城市码 -->
+	<select id="selectCityCode" parameterType="java.lang.String"
+		resultMap="cityMap">
+		SELECT * FROM `t_city` where city_name = #{cityName};
+	</select>
+
+
+
+</mapper>

@@ -21,7 +21,7 @@ import java.util.Scanner;
  */
 public class CodeGeneration {
 
-    private static String url = "jdbc:mysql://127.0.0.1:3306/isyl";
+    private static String url = "jdbc:mysql://47.97.121.30:3306/isyl";
     private static String username = "root";
     private static String password = "root";
 
@@ -99,7 +99,8 @@ public class CodeGeneration {
         strategy.setEntityLombokModel(true);//是否加入lombok
         strategy.setRestControllerStyle(true);//生成 @RestController 控制器
         strategy.setSuperControllerClass(null);//设置继承类
-        strategy.setInclude(new String[]{"t_curd_info", "t_counter", "t_menu"}); // 需要生成的表
+//        strategy.setInclude(new String[]{"t_curd_info", "t_counter", "t_menu"}); // 需要生成的表
+        strategy.setInclude(new String[]{"t_wx_menu"}); // 需要生成的表
 //        strategy.setInclude(scanner("表名"));//需要包含的表名
 //        strategy.setSuperEntityColumns("id"); //设置超级超级列
         strategy.setControllerMappingHyphenStyle(true);//设置controller映射联字符  驼峰转连字符
