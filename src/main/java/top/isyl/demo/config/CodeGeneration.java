@@ -21,7 +21,7 @@ import java.util.Scanner;
  */
 public class CodeGeneration {
 
-    private static String url = "jdbc:mysql://47.97.121.30:3306/isyl";
+    private static String url = "jdbc:mysql://127.0.0.1:3306/isyl";
     private static String username = "root";
     private static String password = "root";
 
