@@ -1,10 +1,15 @@
 package top.isyl.demo.controller;
 
+import cn.hutool.core.util.ObjectUtil;
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import top.isyl.demo.entity.TextMessage;
+import top.isyl.demo.entity.YlCardInfo;
+import top.isyl.demo.service.IYlCardInfoService;
 import top.isyl.demo.service.WeatherService;
 import top.isyl.demo.util.CheckUtil;
 import top.isyl.demo.util.WxTextUtils;
@@ -26,8 +31,10 @@ import java.util.Map;
 @RequestMapping("/wx")
 public class WxController {
 
-    @Resource
+    @Autowired
     WeatherService weatherService;
+    @Autowired
+    IYlCardInfoService cardInfoService;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -118,6 +125,18 @@ public class WxController {
                     wxContent = "<a href=\"http://www.isyl.top/ssq\">双色球</a>";
                 } else if (content.equals("天气") || content.equals("weather") || content.equals("103")) {
                     wxContent = "<a href=\"http://www.weather.com.cn/weather/101210101.shtml\">天气</a>";
+                } else if (content.equals("身份证") || content.equals("随机身份证") || content.equals("104")) {
+                    YlCardInfo card = cardInfoService.getRandomCard();
+                    StringBuffer stringBuffer = new StringBuffer();
+                    if (ObjectUtil.isNotNull(card)) {
+                        stringBuffer.append("id:   \t").append(card.getId());
+                        stringBuffer.append("\r\nname: \t").append(card.getName());
+                        stringBuffer.append("\r\ncard: \t").append(card.getCard());
+                        stringBuffer.append("\r\nphone:\t").append(card.getPhone());
+                        stringBuffer.append("\r\nemail: \t").append(card.getMail());
+                        stringBuffer.append("\r\npwd:  \t").append(card.getPwd());
+                    }
+                    wxContent = stringBuffer.toString();
                 } else {
                     wxContent = "学话：" + content;
                 }
@@ -156,7 +175,8 @@ public class WxController {
         stringBuffer.append("帮助菜单：\r\n");
         stringBuffer.append("101： <a href=\"http://www.baidu.com\">百度一下</a> \r\n");
         stringBuffer.append("102： <a href=\"http://www.isyl.top/ssq\">双色球</a> \r\n");
-        stringBuffer.append("103： <a href=\"http://www.weather.com.cn/weather/101210101.shtml\">天气</a> ");
+        stringBuffer.append("103： <a href=\"http://www.weather.com.cn/weather/101210101.shtml\">天气</a> \r\n");
+        stringBuffer.append("104： <a href=\"http://www.isyl.top/wx/card-info/random\">随机身份证</a> ");
         return stringBuffer.toString();
     }
 }
