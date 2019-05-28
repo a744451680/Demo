@@ -85,7 +85,7 @@ public class WxController {
         try {
             Map e = WxTextUtils.xml2Map(req);
             String toUserName = (String) e.get("ToUserName");
-            String fromUserName = (String) e.get("FromUserName");
+            String fromUserName = (String) e.get("FromUserName");  //openid
             String msgType = (String) e.get("MsgType");
             String content = (String) e.get("Content");
             logger.info(" 接受到的消息：" + content);
@@ -120,25 +120,15 @@ public class WxController {
                 } else if (content.equals("菜单") || content.equals("帮助") || content.equals("help")) {
                     wxContent = this.getHelpMenu();
                 } else if (content.equals("百度") || content.equals("百度一下") || content.equals("101")) {
-                    wxContent = "<a href=\"http://www.baidu.com\">☞百度一下☜</a>";
+                    wxContent = "<a href=\"http://www.baidu.com\">百度一下</a>";
                 } else if (content.equals("双色球") || content.equals("ssq") || content.equals("102")) {
-                    wxContent = "<a href=\"http://www.isyl.top/ssq\">☞双色球☜</a>";
+                    wxContent = "<a href=\"http://www.isyl.top/ssq\">双色球</a>";
                 } else if (content.equals("天气") || content.equals("weather") || content.equals("103")) {
                     wxContent = "<a href=\"http://www.weather.com.cn/weather/101210101.shtml\">☞天气☜</a>";
                 } else if (content.equals("帮百度") || content.equals("需要我帮你百度么") || content.equals("104")) {
                     wxContent = "<a href=\"http://t.cn/EyP3WdS\">☞需要我帮你百度么？☜</a>";
-                } else if (content.equals("身份证") /*|| content.equals("随机身份证") || content.equals("104")*/) {
-                    YlCardInfo card = cardInfoService.getRandomCard();
-                    StringBuffer stringBuffer = new StringBuffer();
-                    if (ObjectUtil.isNotNull(card)) {
-                        stringBuffer.append("id:   \t").append(card.getId());
-                        stringBuffer.append("\r\nname: \t").append(card.getName());
-                        stringBuffer.append("\r\ncard: \t").append(card.getCard());
-                        stringBuffer.append("\r\nphone:\t").append(card.getPhone());
-                        stringBuffer.append("\r\nemail: \t").append(card.getMail());
-                        stringBuffer.append("\r\npwd:  \t").append(card.getPwd());
-                    }
-                    wxContent = stringBuffer.toString();
+                } else if (content.equals("身份证")) {
+                    wxContent = this.getRandomCardContent();
                 } else {
                     wxContent = "学话：" + content;
                 }
@@ -167,6 +157,27 @@ public class WxController {
             }
 
         }
+    }
+
+    /**
+     * 获取随机身份信息str
+     *
+     * @return
+     */
+    private String getRandomCardContent() {
+        String wxContent;
+        YlCardInfo card = cardInfoService.getRandomCard();
+        StringBuffer stringBuffer = new StringBuffer();
+        if (ObjectUtil.isNotNull(card)) {
+            stringBuffer.append("id:   \t").append(card.getId());
+            stringBuffer.append("\r\nname: \t").append(card.getName());
+            stringBuffer.append("\r\ncard: \t").append(card.getCard());
+            stringBuffer.append("\r\nphone:\t").append(card.getPhone());
+            stringBuffer.append("\r\nemail: \t").append(card.getMail());
+            stringBuffer.append("\r\npwd:  \t").append(card.getPwd());
+        }
+        wxContent = stringBuffer.toString();
+        return wxContent;
     }
 
     /**
