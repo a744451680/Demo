@@ -1,7 +1,9 @@
 package top.isyl.demo.controller;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import top.isyl.demo.entity.TextMessage;
 import top.isyl.demo.entity.YlCardInfo;
+import top.isyl.demo.service.ITTempMessageService;
 import top.isyl.demo.service.IYlCardInfoService;
 import top.isyl.demo.service.WeatherService;
 import top.isyl.demo.util.CheckUtil;
@@ -22,6 +25,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,6 +39,8 @@ public class WxController {
     WeatherService weatherService;
     @Autowired
     IYlCardInfoService cardInfoService;
+    @Autowired
+    ITTempMessageService tempMessageService;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -99,24 +105,7 @@ public class WxController {
                 // 返回的信息
                 String wxContent = "";
                 if (content.startsWith("天气=")) {
-                    //如果是【天气+】开头 证明是查询天气
-                    String cityName = content.replace("天气=", "");
-                    logger.info("查询天气 cityName={}", cityName);
-                    if (cityName.endsWith("省") || cityName.endsWith("市")) {
-                        cityName = cityName.substring(0, cityName.length() - 1);
-                        logger.info("subString: cityName={}", cityName);
-                    }
-                    //查询城市码
-                    String cityCode = weatherService.getCityCode(cityName);
-                    logger.info("查询城市码结果：" + cityCode);
-                    if (cityCode != null && !cityCode.trim().isEmpty()) {
-                        //根据城市码查询天气
-                        String weather = weatherService.getWeather(cityCode);
-                        wxContent = weather;
-                    } else {
-                        content = "查询天气格式：天气=【城市名】";
-                        wxContent = content;
-                    }
+                    wxContent = this.getWeather(content);
                 } else if (content.equals("菜单") || content.equals("帮助") || content.equals("help")) {
                     wxContent = this.getHelpMenu();
                 } else if (content.equals("百度") || content.equals("百度一下") || content.equals("101")) {
@@ -127,6 +116,9 @@ public class WxController {
                     wxContent = "<a href=\"http://www.weather.com.cn/weather/101210101.shtml\">☞天气☜</a>";
                 } else if (content.equals("帮百度") || content.equals("需要我帮你百度么") || content.equals("104")) {
                     wxContent = "<a href=\"http://t.cn/EyP3WdS\">☞需要我帮你百度么？☜</a>";
+                } else if (content.equals("手机号") || content.equals("临时号") || content.equals("105")) {
+                    wxContent = "<a href=\"http://www.isyl.top/t-temp-message/phoneIds\">☞临时号☜</a> ";
+
                 } else if (content.equals("身份证")) {
                     wxContent = this.getRandomCardContent();
                 } else {
@@ -159,6 +151,48 @@ public class WxController {
         }
     }
 
+    private String getPhoneIds() {
+        String wxContent = "可用接受短信临时手机：";
+        List<String> phoneIds = tempMessageService.getPhoneIds();
+        if (CollectionUtil.isNotEmpty(phoneIds)) {
+            for (String phoneId : phoneIds) {
+                wxContent = wxContent + "\r\n" +phoneId;
+            }
+        } else {
+            wxContent = "暂无可用手机号，请稍后再试";
+        }
+        return wxContent;
+    }
+
+    /**
+     * 查天气接口暂时不好用了以后维护
+     *
+     * @param content
+     * @return
+     */
+    private String getWeather(String content) {
+        String wxContent;
+        //如果是【天气+】开头 证明是查询天气
+        String cityName = content.replace("天气=", "");
+        logger.info("查询天气 cityName={}", cityName);
+        if (cityName.endsWith("省") || cityName.endsWith("市")) {
+            cityName = cityName.substring(0, cityName.length() - 1);
+            logger.info("subString: cityName={}", cityName);
+        }
+        //查询城市码
+        String cityCode = weatherService.getCityCode(cityName);
+        logger.info("查询城市码结果：" + cityCode);
+        if (cityCode != null && !cityCode.trim().isEmpty()) {
+            //根据城市码查询天气
+            String weather = weatherService.getWeather(cityCode);
+            wxContent = weather;
+        } else {
+            content = "查询天气格式：天气=【城市名】";
+            wxContent = content;
+        }
+        return wxContent;
+    }
+
     /**
      * 获取随机身份信息str
      *
@@ -188,8 +222,9 @@ public class WxController {
         stringBuffer.append("帮助菜单：\r\n");
         stringBuffer.append("101： <a href=\"http://www.baidu.com\">☞百度一下☜</a> \r\n");
         stringBuffer.append("102： <a href=\"http://www.isyl.top/ssq\">☞双色球☜</a> \r\n");
-        stringBuffer.append("103： <a href=\"http://www.weather.com.cn/weather/101210101.shtml\">☞天气☜</a> \n");
-        stringBuffer.append("104： <a href=\"http://t.cn/EyP3WdS\">☞要我帮你百度一下么？☜</a> ");
+        stringBuffer.append("103： <a href=\"http://www.weather.com.cn/weather/101210101.shtml\">☞天气☜</a> \r\n");
+        stringBuffer.append("104： <a href=\"http://t.cn/EyP3WdS\">☞要我帮你百度一下么？☜</a> \r\n");
+        stringBuffer.append("105： <a href=\"http://www.isyl.top/t-temp-message/phoneIds\">☞临时号☜</a> ");
 //        stringBuffer.append("104： <a href=\"http://www.isyl.top/wx/card-info/random\">☞随机身份证☜</a> ");
         return stringBuffer.toString();
     }
