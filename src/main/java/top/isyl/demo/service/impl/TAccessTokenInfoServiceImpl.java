@@ -40,6 +40,7 @@ public class TAccessTokenInfoServiceImpl extends ServiceImpl<TAccessTokenInfoMap
      */
     @Override
     public void updateAccessToken() {
+        if(true)return ;
         while (true) {
             log.info("获取access_token");
             String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + this.appId + "&secret=" + this.appSecret;

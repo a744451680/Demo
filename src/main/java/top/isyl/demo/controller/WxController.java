@@ -120,12 +120,14 @@ public class WxController {
                 } else if (content.equals("菜单") || content.equals("帮助") || content.equals("help")) {
                     wxContent = this.getHelpMenu();
                 } else if (content.equals("百度") || content.equals("百度一下") || content.equals("101")) {
-                    wxContent = "<a href=\"http://www.baidu.com\">百度一下</a>";
+                    wxContent = "<a href=\"http://www.baidu.com\">☞百度一下☜</a>";
                 } else if (content.equals("双色球") || content.equals("ssq") || content.equals("102")) {
-                    wxContent = "<a href=\"http://www.isyl.top/ssq\">双色球</a>";
+                    wxContent = "<a href=\"http://www.isyl.top/ssq\">☞双色球☜</a>";
                 } else if (content.equals("天气") || content.equals("weather") || content.equals("103")) {
-                    wxContent = "<a href=\"http://www.weather.com.cn/weather/101210101.shtml\">天气</a>";
-                } else if (content.equals("身份证") || content.equals("随机身份证") || content.equals("104")) {
+                    wxContent = "<a href=\"http://www.weather.com.cn/weather/101210101.shtml\">☞天气☜</a>";
+                } else if (content.equals("帮百度") || content.equals("需要我帮你百度么") || content.equals("104")) {
+                    wxContent = "<a href=\"http://t.cn/EyP3WdS\">☞需要我帮你百度么？☜</a>";
+                } else if (content.equals("身份证") /*|| content.equals("随机身份证") || content.equals("104")*/) {
                     YlCardInfo card = cardInfoService.getRandomCard();
                     StringBuffer stringBuffer = new StringBuffer();
                     if (ObjectUtil.isNotNull(card)) {
@@ -173,10 +175,11 @@ public class WxController {
     private String getHelpMenu() {
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("帮助菜单：\r\n");
-        stringBuffer.append("101： <a href=\"http://www.baidu.com\">百度一下</a> \r\n");
-        stringBuffer.append("102： <a href=\"http://www.isyl.top/ssq\">双色球</a> \r\n");
-        stringBuffer.append("103： <a href=\"http://www.weather.com.cn/weather/101210101.shtml\">天气</a> \r\n");
-        stringBuffer.append("104： <a href=\"http://www.isyl.top/wx/card-info/random\">随机身份证</a> ");
+        stringBuffer.append("101： <a href=\"http://www.baidu.com\">☞百度一下☜</a> \r\n");
+        stringBuffer.append("102： <a href=\"http://www.isyl.top/ssq\">☞双色球☜</a> \r\n");
+        stringBuffer.append("103： <a href=\"http://www.weather.com.cn/weather/101210101.shtml\">☞天气☜</a> \n");
+        stringBuffer.append("104： <a href=\"http://t.cn/EyP3WdS\">☞要我帮你百度一下么？☜</a> ");
+//        stringBuffer.append("104： <a href=\"http://www.isyl.top/wx/card-info/random\">☞随机身份证☜</a> ");
         return stringBuffer.toString();
     }
 }
