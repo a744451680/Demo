@@ -48,7 +48,7 @@ public class CURDServiceImpl extends ServiceImpl<CURDMapper, CURDInfo> implement
      */
     @Override
     public String selectCount() {
-        return this.baseMapper.selectCount();
+        return this.baseMapper.selCount();
     }
 
 

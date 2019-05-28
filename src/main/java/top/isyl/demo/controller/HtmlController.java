@@ -40,4 +40,10 @@ public class HtmlController {
     public String line() {
         return "line";
     }
+
+    @GetMapping("/file")
+    @ApiOperation(value="测试file页面")
+    public String file() {
+        return "file";
+    }
 }

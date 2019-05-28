@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.Map;
 
 /**
  * @author adminintrator
@@ -65,6 +66,45 @@ public class HttpRequestUtil {
         }
         return result;
     }
+
+
+    public static String get(String url,Map<String,String> headers) {
+        CloseableHttpResponse response = null;
+        BufferedReader in = null;
+        String result = "";
+        try {
+            HttpGet httpGet = new HttpGet(url);
+            RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(30000).setConnectionRequestTimeout(30000).setSocketTimeout(30000).build();
+            httpGet.setConfig(requestConfig);
+            httpGet.setConfig(requestConfig);
+            headers.forEach((x,y)->{
+                httpGet.addHeader(x,y);
+            });
+            response = httpClient.execute(httpGet);
+            in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            StringBuffer sb = new StringBuffer("");
+            String line = "";
+            String NL = System.getProperty("line.separator");
+            while ((line = in.readLine()) != null) {
+                sb.append(line + NL);
+            }
+            in.close();
+            result = sb.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != response) {
+                    response.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+
 
     public static String post(String url, String jsonString) {
         CloseableHttpResponse response = null;

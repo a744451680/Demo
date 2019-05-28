@@ -15,5 +15,5 @@ public interface CURDMapper  extends BaseMapper<CURDInfo> {
     @Select("SELECT * FROM t_curd_info where id = #{id}")
     CURDInfo getInfoById(@Param("id") String id);
 
-    String selectCount();
+    String selCount();
 }

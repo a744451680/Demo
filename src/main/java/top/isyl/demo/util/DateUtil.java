@@ -2,6 +2,8 @@ package top.isyl.demo.util;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
@@ -35,4 +37,16 @@ public class DateUtil {
 		DateFormat format = new SimpleDateFormat("yyyyMMdd");
 		return format.format(date);
 	}
+
+
+	/**
+	 * 字符串转LocalDateTime
+	 */
+	public static LocalDateTime str2LocalDateTime(String dateTime){
+		DateTimeFormatter  format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		LocalDateTime localDateTime = LocalDateTime.parse(dateTime, format);
+		return  localDateTime;
+	}
+
+
 }

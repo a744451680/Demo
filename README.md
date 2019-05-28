@@ -10,3 +10,8 @@
 * TMenuController       list转tree 
 * ControllerAop         切面控制器
 * CodeGeneration        代码生成
+
+
+* TAccessTokenInfoController     AccessTokenInfo相关
+* TWxMenuController     微信菜单相关
+* FileController        文件上传下载

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.isyl.demo.mapper.CURDMapper">
 
-    <select id="selectCount" resultType="string">
+    <select id="selCount" resultType="string">
         SELECT count(*) FROM t_curd_info
     </select>
 </mapper>

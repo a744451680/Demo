@@ -1,7 +1,10 @@
-package top.isyl.demo.service.impl;/*package com.isyl.service.impl;
+package top.isyl.demo.service.impl;
 
 import javax.annotation.Resource;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -9,30 +12,27 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.isyl.bean.WeatherInfo;
-import com.isyl.mapper.WeatherMapper;
-import com.isyl.service.WeatherService;
-import com.isyl.utils.HttpsClientUtil;
+import top.isyl.demo.entity.WeatherInfo;
+import top.isyl.demo.mapper.WeatherMapper;
+import top.isyl.demo.service.WeatherService;
+import top.isyl.demo.util.HttpRequestUtil;
 
 @Service
-public class WeatherServiceImpl implements WeatherService{
+@Slf4j
+public class WeatherServiceImpl implements WeatherService {
 
-	@Resource
-	private WeatherMapper weatherMapper;
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-
-	*//**
+	/**
 	 * 查询当日天气
 	 * code ： 城市码
-	 *//*
+	 */
 	@Override
 	public  String getWeather(String code) {
-		logger.info("查询当日天气：code={}",code);
-		String s = HttpsClientUtil.httpRequest("http://tj.nineton.cn/Heart/index/all?city="+code, "GET", null);
-		logger.info("调用api查询天气返回json={}",s);
+		log.info("查询当日天气：code={}",code);
+		String s = ""; // HttpsClientUtil.httpRequest("http://tj.nineton.cn/Heart/index/all?city="+code, "GET", null);
+		log.info("调用api查询天气返回json={}",s);
 		JSONObject obj = JSON.parseObject(s);
 		Object status = obj.get("status");
-		
+
 		if(  !"OK".equals(status.toString())){
 			System.out.println("error");
 			return "error";
@@ -50,45 +50,67 @@ public class WeatherServiceImpl implements WeatherService{
 			Object high = jsi.get("high");//13
 			Object low = jsi.get("low");//4
 			Object wind = jsi.get("wind");//风力2级
-//			Object day = jsi.get("day");//星期二
-			String text = jsi.get("text").toString();
-			String[] split = text.split("/"); // 晴
-			
+			Object day = jsi.get("day").toString().replace("周", "星期");//星期二
+			String text = jsi.get("text").toString();// 晴/多云
+			/*String[] split = text.split("/");
+
 			if(split!=null && split[0].equals(split[1])){
 				text = split[0];
 			}else if(split!=null){
 				text = text.replace("/", " 转 "); //晴 转 多云
-			}
-			
+			}*/
 
-			sb.append("【");
-			sb.append(dateMd);
-			sb.append("】");
-			sb.append(text);
-			sb.append("\n                 气温： ");					// 【03-03】晴转多云
-			sb.append(low+"°C ~ "+high+"°C\n");		//  气温：  3°C ~ 8°C 
+			if(text.contains("雨")){
+				text = " 🌧️ ";
+			}else if (text.contains("雪")){
+				text = " ❄ ";
+			}else if (text.contains("阴")){
+				text = " ☁️ ";
+			}else if (text.contains("风")){
+				text = " 💨 ";
+			}else if (text.contains("多云")){
+				text = " ⛅️ ";
+			}else if (text.contains("晴")){
+				text = " ☀️ ";
+			}
+//			sb.append("【");
+			sb.append(day);
+//			sb.append("】");
+			sb.append(text);				// 【星期一】晴转多云
+			sb.append(low+"°C ~ "+high+"°C\n");									//  气温：  3°C ~ 8°C
 		}
-		
-		
-		logger.info("查询当日天气出参："+sb.toString());
+
+
+		log.info("查询当日天气出参："+sb.toString());
 		return sb.toString();
 	}
 
-	*//**
+	/**
 	 * 查询城市码
-	 *//*
+	 */
 	@Override
 	public String getCityCode(String cityName) {
-		logger.info("查询城市码：cityName={}",cityName);
+		log.info("查询城市码：cityName={}",cityName);
 		String cityCode = "";
-		WeatherInfo weaterInfo = weatherMapper.selectCityCode(cityName);
-		logger.info("weaterInfo={}",JSON.toJSON(weaterInfo));
-		if(weaterInfo!=null){
-			cityCode = weaterInfo.getCityId();
+		//redis  db
+		String url = "https://toy1.weather.com.cn/search?cityname="+cityName;
+		String codeResp = HttpRequestUtil.get(url);
+		if(StringUtils.isNotEmpty(codeResp)) {
+			//去括号
+			String substring = codeResp.substring(1, codeResp.length() - 3);
+			JSONArray jsonArray = JSON.parseArray(substring);
+			if(CollectionUtils.isNotEmpty(jsonArray)){
+				JSONObject jsonObject = jsonArray.getJSONObject(0);
+				String ref = jsonObject.get("ref").toString();
+				String[] split = ref.split("~");
+				//城市码
+				cityCode = split[0];
+			}else {
+				log.info("查询城市码:城市名称输入有误");
+			}
 		}
-		logger.info("查询城市码出参：{}",cityCode);
+		log.info("查询城市码出参：{}",cityCode);
 		return cityCode;
 	}
-	
+
 }
-*/
