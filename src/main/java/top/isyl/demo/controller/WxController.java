@@ -159,7 +159,7 @@ public class WxController {
         List<String> phoneIds = tempMessageService.getPhoneIds();
         if (CollectionUtil.isNotEmpty(phoneIds)) {
             for (String phoneId : phoneIds) {
-                wxContent = wxContent + "\r\n" + phoneId;
+                wxContent = wxContent + "\r\n <a > " + phoneId +" </a> ";
             }
         } else {
             wxContent = "暂无可用手机号，请稍后再试";
