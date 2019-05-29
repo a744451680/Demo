@@ -23,34 +23,34 @@ import java.util.Map;
 @Component
 public class ControllerAop {
 
-    @Pointcut("execution(public * top.isyl.demo.controller.*.*(..))")
+  /*  @Pointcut("execution(public * top.isyl.demo.controller.*.*(..))")
     public void pointCutController() {
     }
 
-    /**
+    *//**
      * 拦截器具体实现
      *
      * @param pjp 切点 所有控制器，监控响应时间
      * @return R  结果包装
-     */
+     *//*
     @Around("pointCutController()")
     public Object methodRHandler(ProceedingJoinPoint pjp) throws Throwable {
         return methodHandler(pjp);
     }
 
-    /**
+    *//**
      * 定义切点
-     */
+     *//*
     @Pointcut("execution(public * top.isyl.demo.mapper.*.*(..))")
     public void pointCutMapper() {
     }
 
-    /**
+    *//**
      * 拦截器具体实现
      *
      * @param pjp 切点 所有mapper 监控sql性能
      * @return R  结果包装
-     */
+     *//*
     @Around("pointCutMapper()")
     public Object methodPageHandler(ProceedingJoinPoint pjp) throws Throwable {
         return methodHandler(pjp);
@@ -89,5 +89,5 @@ public class ControllerAop {
             return result;
         }
         return pjp.proceed();
-    }
+    }*/
 }

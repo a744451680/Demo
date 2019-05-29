@@ -103,18 +103,18 @@ public class TTempMessageServiceImpl extends ServiceImpl<TTempMessageMapper, TTe
      */
     @Override
     public List<TTempMessage> getNetMessageList(String msgUrl) {
-
+        log.info("爬取  url为：" + msgUrl + " 的信息。");
         List<TTempMessage> res = new ArrayList<>();
 
-        //一页十条  默认2页
-        for (int pageSize = 1; pageSize <= 2; pageSize++) {
-            Map param = new HashMap(20);
+        //一页十条  默认1页
+        for (int pageSize = 1; pageSize <= 1; pageSize++) {
+            Map param = new HashMap(10);
 
 //            String url = "https://www.pdflibr.com/" + msgUrl + "?page=" + pageSize;
             String url = msgUrl + "?page=" + pageSize;
             param.put("authority", "www.pdflibr.com");
             param.put("method", "GET");
-            param.put("path", "/?page="+pageSize);
+            param.put("path", "/?page=" + pageSize);
             param.put("scheme", "https");
             param.put("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
             param.put("accept-encoding", "gzip, deflate, br");
@@ -137,9 +137,9 @@ public class TTempMessageServiceImpl extends ServiceImpl<TTempMessageMapper, TTe
             list.forEach(x -> {
                 TTempMessage tm = new TTempMessage();
                 List<JXNode> timeNodes = x.sel(".//time/text()");
-                if(CollectionUtils.isNotEmpty(timeNodes)){
-                    JXNode jxNode =  timeNodes.get(0);
-                    String createTime = jxNode == null ? "1999-09-09 09:09:09" :jxNode.getTextVal();
+                if (CollectionUtils.isNotEmpty(timeNodes)) {
+                    JXNode jxNode = timeNodes.get(0);
+                    String createTime = jxNode == null ? "1999-09-09 09:09:09" : jxNode.getTextVal();
                     LocalDateTime localDateTime = DateUtil.str2LocalDateTime(createTime);
                     tm.setCreateTime(localDateTime);
                 }
@@ -173,7 +173,7 @@ public class TTempMessageServiceImpl extends ServiceImpl<TTempMessageMapper, TTe
             String url = "https://www.pdflibr.com/?page=" + pageSize;
             param.put("authority", "www.pdflibr.com");
             param.put("method", "GET");
-            param.put("path", "/?page="+pageSize);
+            param.put("path", "/?page=" + pageSize);
             param.put("scheme", "https");
             param.put("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
             param.put("accept-encoding", "gzip, deflate, br");
