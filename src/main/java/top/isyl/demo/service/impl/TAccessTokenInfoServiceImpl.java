@@ -34,80 +34,91 @@ public class TAccessTokenInfoServiceImpl extends ServiceImpl<TAccessTokenInfoMap
     @Value("${wx.appSecret}")
     private String appSecret;
 
+    /**
+     * 是否校验AccessToken
+     */
+    @Value("${wx.accessToken}")
+    private Boolean accessToken;
+
 
     /**
      * 获取AccessToken
      */
     @Override
     public void updateAccessToken() {
-//        if(true)return ;
-        while (true) {
-            log.info("获取access_token");
-            String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + this.appId + "&secret=" + this.appSecret;
+        if (accessToken) {
+            while (true) {
+                log.info("获取access_token");
+                String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + this.appId + "&secret=" + this.appSecret;
 //            String response = HttpsClientUtil.httpsRequest(url, "GET", null);
-            String response = HttpRequestUtil.get(url);
+                String response = HttpRequestUtil.get(url);
 
-            log.info("response:" + response);
-            String accessToken = "";
-            JSONObject obj = JSON.parseObject(response);
-            if (ObjectUtil.isNotNull(obj)) {
-                if (ObjectUtil.isNotNull(obj.get("access_token"))) {
-                    accessToken = obj.get("access_token").toString();
-                    if (ObjectUtil.isNotNull(accessToken)) {
-                        log.info("获取access_token结果：{}", accessToken);
-                        TAccessTokenInfo accessTokenInfo = new TAccessTokenInfo();
-                        accessTokenInfo.setTokenId("isyl");
-                        accessTokenInfo.setExpiresIn("7200");
-                        accessTokenInfo.setRegTime(DateUtil.getDateToStringMilli(new Date()));
-                        accessTokenInfo.setAccessToken(accessToken);
-                        try {
-                            this.updateById(accessTokenInfo);
-                            log.info("access_token更新成功");
-                            return;
-                        } catch (Exception e) {
-                            log.info("更新AccessToken时异常e={}", e);
+                log.info("response:" + response);
+                String accessToken = "";
+                JSONObject obj = JSON.parseObject(response);
+                if (ObjectUtil.isNotNull(obj)) {
+                    if (ObjectUtil.isNotNull(obj.get("access_token"))) {
+                        accessToken = obj.get("access_token").toString();
+                        if (ObjectUtil.isNotNull(accessToken)) {
+                            log.info("获取access_token结果：{}", accessToken);
+                            TAccessTokenInfo accessTokenInfo = new TAccessTokenInfo();
+                            accessTokenInfo.setTokenId("isyl");
+                            accessTokenInfo.setExpiresIn("7200");
+                            accessTokenInfo.setRegTime(DateUtil.getDateToStringMilli(new Date()));
+                            accessTokenInfo.setAccessToken(accessToken);
+                            try {
+                                //这里可以加缓存
+//                            redisTemplate.opsForValue().set("accessToken",accessTokenInfo.getAccessToken(),30*60,TimeUnit.SECONDS);
+                                this.updateById(accessTokenInfo);
+                                log.info("access_token更新成功");
+                                return;
+                            } catch (Exception e) {
+                                log.info("更新AccessToken时异常e={}", e);
+                            }
+                        } else {
+                            try {
+                                log.info("获取Access_token时Access_token=null等待60秒");
+                                Thread.sleep(60000);
+                            } catch (InterruptedException e) {
+                                log.info("获取Access_token时Access_token=null等待60秒 异常e={}", e);
+                            }
                         }
-                    }else{
-                        try {
-                            log.info("获取Access_token时Access_token=null等待60秒");
-                            Thread.sleep(60000);
-                        } catch (InterruptedException e) {
-                            log.info("获取Access_token时Access_token=null等待60秒 异常e={}", e);
+                    } else {
+                        if (ObjectUtil.isNotNull(obj.get("errcode"))) {
+                            // 错误码
+                            String errorCode = obj.get("errcode").toString();
+                            switch (errorCode) {
+                                case "0":
+                                    log.info("微信返回：{}  系统繁忙，此时请开发者稍候再试", errorCode);
+                                    break;
+                                case "-1":
+                                    log.info("微信返回：{}  请求成功", errorCode);
+                                    break;
+                                case "40001":
+                                    log.info("微信返回：{}  AppSecret错误或者AppSecret不属于这个公众号，请开发者确认AppSecret的正确性", errorCode);
+                                    break;
+                                case "40002":
+                                    log.info("微信返回：{}  请确保grant_type字段值为client_credential", errorCode);
+                                    break;
+                                case "40164":
+                                    log.info("微信返回：{}  调用接口的IP地址不在白名单中，请在接口IP白名单中进行设置", errorCode);
+                                    break;
+                                default:
+                                    log.info("微信返回：{}  错误原因微信官方未给解释", errorCode);
+                            }
                         }
                     }
                 } else {
-                    if (ObjectUtil.isNotNull(obj.get("errcode"))){
-                        // 错误码
-                        String errorCode = obj.get("errcode").toString();
-                        switch (errorCode) {
-                            case "0":
-                                log.info("微信返回：{}  系统繁忙，此时请开发者稍候再试", errorCode);
-                                break;
-                            case "-1":
-                                log.info("微信返回：{}  请求成功", errorCode);
-                                break;
-                            case "40001":
-                                log.info("微信返回：{}  AppSecret错误或者AppSecret不属于这个公众号，请开发者确认AppSecret的正确性", errorCode);
-                                break;
-                            case "40002":
-                                log.info("微信返回：{}  请确保grant_type字段值为client_credential", errorCode);
-                                break;
-                            case "40164":
-                                log.info("微信返回：{}  调用接口的IP地址不在白名单中，请在接口IP白名单中进行设置", errorCode);
-                                break;
-                            default:
-                                log.info("微信返回：{}  错误原因微信官方未给解释", errorCode);
-                        }
+                    try {
+                        log.info("获取Access_token时null等待60秒");
+                        Thread.sleep(60000);
+                    } catch (InterruptedException e) {
+                        log.info("获取Access_token时null等待60秒 异常e={}", e);
                     }
                 }
-            } else {
-                try {
-                    log.info("获取Access_token时null等待60秒");
-                    Thread.sleep(60000);
-                } catch (InterruptedException e) {
-                    log.info("获取Access_token时null等待60秒 异常e={}", e);
-                }
             }
+        } else {
+            return;
         }
     }
 }
