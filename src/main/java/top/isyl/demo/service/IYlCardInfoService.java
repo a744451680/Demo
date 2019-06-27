@@ -1,7 +1,10 @@
 package top.isyl.demo.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import top.isyl.demo.entity.YlCardInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -18,4 +21,15 @@ public interface IYlCardInfoService extends IService<YlCardInfo> {
      * @return
      */
     YlCardInfo getRandomCard();
+
+    /**
+     * 获取身份信息 年份 列表
+     */
+    List<String> getCaedYears();
+
+
+    /**
+     * 分页查询身份信息
+     */
+    IPage<YlCardInfo> cardPageList(String name, Integer year, Integer pageNum, Integer pageSize);
 }

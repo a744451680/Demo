@@ -1,7 +1,10 @@
 package top.isyl.demo.mapper;
 
+import org.apache.ibatis.annotations.Select;
 import top.isyl.demo.entity.YlCardInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface YlCardInfoMapper extends BaseMapper<YlCardInfo> {
 
+    @Select("select substr(card,7,4) sub from yl_card_info where length(card) = 18 GROUP BY sub")
+    List<String> getCaedYears();
 }

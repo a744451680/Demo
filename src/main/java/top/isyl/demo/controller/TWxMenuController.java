@@ -1,3 +1,4 @@
+/*
 package top.isyl.demo.controller;
 
 
@@ -14,6 +15,7 @@ import top.isyl.demo.service.impl.TWxMenuServiceImpl;
 
 import javax.annotation.Resource;
 
+*/
 /**
  * <p>
  * 微信菜单表 前端控制器
@@ -21,7 +23,8 @@ import javax.annotation.Resource;
  *
  * @author hyl
  * @since 2019-04-22
- */
+ *//*
+
 @RestController
 @RequestMapping("/wx/t-wx-menu")
 @Slf4j
@@ -30,9 +33,11 @@ public class TWxMenuController {
     @Resource
     ITWxMenuService wxMenuService;
 
-    /**
+    */
+/**
      * 创建微信菜单(需要认证号)
-     */
+     *//*
+
     @GetMapping("/createWxMenux")
     @ApiOperation(value = "创建微信菜单")
     public AjaxResult createWxMenux() {
@@ -47,9 +52,11 @@ public class TWxMenuController {
         return new AjaxResult().success();
     }
 
-    /**
+    */
+/**
      * 查询微信菜单(需要认证号)
-     */
+     *//*
+
     @GetMapping("/getWxMenux")
     @ApiOperation(value = "查询微信菜单")
     public AjaxResult getWxMenux() {
@@ -65,9 +72,11 @@ public class TWxMenuController {
         return new AjaxResult().success().res(menuJson);
     }
 
-    /**
+    */
+/**
      * 删除微信菜单(需要认证号)
-     */
+     *//*
+
     @GetMapping("/delectWxMenu")
     @ApiOperation(value = "删除微信菜单")
     public AjaxResult delectWxMenu() {
@@ -82,3 +91,4 @@ public class TWxMenuController {
         return new AjaxResult().success();
     }
 }
+*/

@@ -10,7 +10,7 @@
 * TMenuController               list转tree 
 * ControllerAop                 切面控制器
 * CodeGeneration                代码生成
-
+* RedisController               redis缓存相关
 
 * TAccessTokenInfoController    AccessTokenInfo相关
 * TWxMenuController             微信菜单相关
