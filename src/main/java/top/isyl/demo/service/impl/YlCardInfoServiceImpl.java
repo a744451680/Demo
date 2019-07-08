@@ -28,6 +28,7 @@ public class YlCardInfoServiceImpl extends ServiceImpl<YlCardInfoMapper, YlCardI
 
     /**
      * 获取随机身份信息
+     *
      * @return
      */
     @Override
@@ -36,7 +37,7 @@ public class YlCardInfoServiceImpl extends ServiceImpl<YlCardInfoMapper, YlCardI
         int count = this.count();
 
         QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.last("limit "+new Random().nextInt(count)+",1" );
+        queryWrapper.last("limit " + new Random().nextInt(count) + ",1");
         YlCardInfo cardInfo = this.getOne(queryWrapper);
 
         return cardInfo;
@@ -55,18 +56,23 @@ public class YlCardInfoServiceImpl extends ServiceImpl<YlCardInfoMapper, YlCardI
      * 分页查询身份信息
      */
     @Override
-    public IPage<YlCardInfo> cardPageList(String name, Integer year, Integer pageNum, Integer pageSize) {
+    public IPage<YlCardInfo> cardPageList(String name, String startDate, String endDate, Integer pageNum, Integer pageSize) {
 
+        // 日期 转换成数字 ， 20180808
         QueryWrapper<YlCardInfo> qw = new QueryWrapper<>();
         //动态拼接，姓名
-        if(!StringUtils.isEmpty(name)){
-            qw.like("name",name);
+        if (!StringUtils.isEmpty(name)) {
+            qw.like("name", name);
         }
-        //出生年月
-        if(ObjectUtil.isNotNull(year)){
-            qw.eq("substr(card,7,4)",year);
+        //起始日期
+        if (ObjectUtil.isNotNull(startDate)) {
+            qw.ge("substr(card,7,8)", startDate);
         }
-
+        //结束日期
+        if (ObjectUtil.isNotNull(endDate)) {
+            qw.le("substr(card,7,8)", endDate);
+        }
+        qw.orderByAsc("substr( card, 7,8 )");
         IPage<YlCardInfo> page = this.page(new Page<>(pageNum, pageSize), qw);
 
         return page;

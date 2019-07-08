@@ -18,6 +18,7 @@ public interface IYlCardInfoService extends IService<YlCardInfo> {
 
     /**
      * 获取随机身份信息;
+     *
      * @return
      */
     YlCardInfo getRandomCard();
@@ -31,5 +32,5 @@ public interface IYlCardInfoService extends IService<YlCardInfo> {
     /**
      * 分页查询身份信息
      */
-    IPage<YlCardInfo> cardPageList(String name, Integer year, Integer pageNum, Integer pageSize);
+    IPage<YlCardInfo> cardPageList(String name, String startDate, String endDate, Integer pageNum, Integer pageSize);
 }

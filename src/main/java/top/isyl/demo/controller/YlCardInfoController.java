@@ -78,18 +78,17 @@ public class YlCardInfoController {
     public AjaxResult getCardPageInfo(@ApiParam(name = "pageNum", value = "页码") @RequestParam(defaultValue = "1") Integer pageNum
             , @ApiParam(name = "pageSize", value = "每页显示数量") @RequestParam(defaultValue = "5") Integer pageSize
             , @ApiParam(name = "name", value = "姓名") @RequestParam(required = false) String name
-            , @ApiParam(name = "year", value = "出生年") @RequestParam(required = false) Integer year) {
-
-        log.info("获取身份信息 年份 列表 name:{} ,year:{} ,pageNum{} ,pageSize:{}",name,year,pageNum,pageSize);
-        IPage<YlCardInfo> years;
+            , @ApiParam(name = "startDate", value = "起始日期") @RequestParam(required = false) String startDate
+            , @ApiParam(name = "endDate", value = "结束日期") @RequestParam(required = false) String endDate) {
+        log.info("获取身份信息 年份 列表 name:{} ,startDate:{} ,endDate:{} ,pageNum{} ,pageSize:{}", name, startDate, endDate, pageNum, pageSize);
+        IPage<YlCardInfo> pageList;
         try {
-            years = cardInfoService.cardPageList(name,year,pageNum,pageSize);
+            pageList = cardInfoService.cardPageList(name, startDate, endDate, pageNum, pageSize);
         } catch (Exception e) {
             return new AjaxResult().fail();
         }
         log.info("获取身份信息 年份 列表 成功");
-        return new AjaxResult().success().res(years);
+        return new AjaxResult().success().res(pageList);
     }
-
 
 }
